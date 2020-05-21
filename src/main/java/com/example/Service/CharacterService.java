@@ -28,8 +28,17 @@ public class CharacterService {
     private final static String CHARACTERS_URL = "https://gateway.marvel.com/v1/public/characters?";
     private final static String NAME_STARTS_WITH = "&nameStartsWith=";
 
-    public Iterable<CharacterHero> getAllHeroes() throws IOException {
+    public Iterable<CharacterHero> getAllCharacters() throws IOException {
         String url = CHARACTERS_URL + getAuthParameters();
+        return getListOfCharacters(url);
+    }
+
+    public CharacterHero getCharacter(String characterName) throws JsonProcessingException, MalformedURLException {
+        String url = CHARACTERS_URL + getAuthParameters() + NAME_STARTS_WITH + characterName;
+        return getListOfCharacters(url).get(0);
+    }
+
+    private ArrayList<CharacterHero> getListOfCharacters(String url) throws JsonProcessingException, MalformedURLException {
         ArrayList<CharacterHero> characters = new ArrayList<>();
         StringBuffer imageUrl = new StringBuffer();
         for (JsonNode jN: getResults(url)) {
@@ -39,19 +48,6 @@ public class CharacterService {
             imageUrl.setLength(0);
         }
         return characters;
-    }
-
-    public CharacterHero getCharacter(String characterName) throws JsonProcessingException, MalformedURLException {
-        String url = CHARACTERS_URL + getAuthParameters() + NAME_STARTS_WITH + characterName;
-        ArrayList<CharacterHero> characters = new ArrayList<>();
-        StringBuffer imageUrl = new StringBuffer();
-        for (JsonNode jN: getResults(url)) {
-            String name = cleanString(jN.findValue("name").toString());
-            String desc = cleanString(jN.findValue("description").toString());
-            characters.add(new CharacterHero(jN.findValue("id").asInt(), name , desc, getImageUrl(jN,imageUrl)));
-            imageUrl.setLength(0);
-        }
-        return characters.get(0);
     }
 
     private JsonNode getResults(String url) throws JsonProcessingException {

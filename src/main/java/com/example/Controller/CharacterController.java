@@ -18,8 +18,8 @@ public class CharacterController {
     private CharacterService characterService;
 
     @GetMapping
-    public Iterable<CharacterHero> getAllHeroes() throws IOException {
-        return characterService.getAllHeroes();
+    public Iterable<CharacterHero> getAllCharacters() throws IOException {
+        return characterService.getAllCharacters();
     }
 
     @GetMapping(value = "/{name}")
