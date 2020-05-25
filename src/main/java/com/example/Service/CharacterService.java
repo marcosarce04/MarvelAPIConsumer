@@ -1,5 +1,6 @@
 package com.example.Service;
 
+import com.example.Dao.HeroesRepository;
 import com.example.Entities.CharacterHero;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -23,10 +24,15 @@ import static com.example.Utilities.UrlFormatter.getImageUrl;
 @Service
 public class CharacterService {
 
+    private final HeroesRepository repository;
 
-    private final static Logger LOGGER = Logger.getLogger("com.example.Service.CharacterService");
-    private final static String CHARACTERS_URL = "https://gateway.marvel.com/v1/public/characters?";
-    private final static String NAME_STARTS_WITH = "&nameStartsWith=";
+    private static final String CHARACTERS_URL = "https://gateway.marvel.com/v1/public/characters?";
+    private static final Logger LOGGER = Logger.getLogger("com.example.Service.CharacterService");
+    private static final String NAME_STARTS_WITH = "&nameStartsWith=";
+
+    public CharacterService(HeroesRepository repository) {
+        this.repository = repository;
+    }
 
     public Iterable<CharacterHero> getAllCharacters() throws IOException {
         String url = CHARACTERS_URL + getAuthParameters();
@@ -36,6 +42,10 @@ public class CharacterService {
     public CharacterHero getCharacter(String characterName) throws JsonProcessingException, MalformedURLException {
         String url = CHARACTERS_URL + getAuthParameters() + NAME_STARTS_WITH + characterName;
         return getListOfCharacters(url).get(0);
+    }
+
+    public Iterable<CharacterHero> getFavorites() {
+        return repository.findAll();
     }
 
     private ArrayList<CharacterHero> getListOfCharacters(String url) throws JsonProcessingException, MalformedURLException {
@@ -55,9 +65,8 @@ public class CharacterService {
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
 
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode results = mapper.readTree(responseEntity.getBody()).path("data").path("results");
+        return mapper.readTree(responseEntity.getBody()).path("data").path("results");
 
-        return results;
     }
 
     private Image getImage( StringBuffer sB) throws MalformedURLException {
@@ -68,6 +77,6 @@ public class CharacterService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return (image != null) ? image : null;
+        return image;
     }
 }

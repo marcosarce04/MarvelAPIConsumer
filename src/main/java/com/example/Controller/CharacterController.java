@@ -26,4 +26,9 @@ public class CharacterController {
     public CharacterHero getHero(@PathVariable("name") String name) throws IOException {
         return characterService.getCharacter(name);
     }
+
+    @GetMapping(value = "/favs")
+    public Iterable<CharacterHero> getFavorites() {
+        return characterService.getFavorites();
+    }
 }

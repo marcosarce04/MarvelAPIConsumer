@@ -1,9 +1,13 @@
 package com.example.Entities;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.net.URL;
 
+@Entity
 public class CharacterHero {
 
+    @Id
     private int id;
     private String name;
     private String description;
