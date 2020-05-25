@@ -6,5 +6,5 @@
  favoritos.  
   
 La aplicacion se puede acceder desde: https://marvelapiconsumer.herokuapp.com/marvel  
-  
+  Puede demorar unos minutos hasta que la aplicación levante en Heroku.  
 La documentación de la API se encuentra en: https://marvelapiconsumer.herokuapp.com/swagger-ui.html
