@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface HeroesRepository extends CrudRepository<CharacterHero, Integer> {
 
-    public void deleteByName(String name);
 
 }

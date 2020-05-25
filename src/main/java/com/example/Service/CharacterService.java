@@ -2,6 +2,9 @@ package com.example.Service;
 
 import com.example.Dao.HeroesRepository;
 import com.example.Entities.CharacterHero;
+import com.example.Exceptions.FavoriteListEmptyException;
+import com.example.Exceptions.InvalidQuantityException;
+import com.example.Exceptions.NoCharacterFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,9 +33,27 @@ public class CharacterService {
     private static final String CHARACTERS_URL = "https://gateway.marvel.com/v1/public/characters?";
     private static final Logger LOGGER = Logger.getLogger("com.example.Service.CharacterService");
     private static final String NAME_STARTS_WITH = "&nameStartsWith=";
+    private static final String LIMIT = "&limit=";
 
     public CharacterService(HeroesRepository repository) {
         this.repository = repository;
+    }
+
+    public Iterable<CharacterHero> getAllCharacters(String cant) throws MalformedURLException, JsonProcessingException,
+            InvalidQuantityException {
+        StringBuffer url = new StringBuffer();
+        if (stringIsNotNullOrEmpty(cant)) {
+            url.append(CHARACTERS_URL).append(getAuthParameters()).append(LIMIT).append(cant);
+        } else {
+            url.append(CHARACTERS_URL).append(getAuthParameters());
+        }
+        ArrayList<CharacterHero> aL;
+        try {
+            aL = getListOfCharacters(url.toString());
+        } catch(Exception e) {
+            throw new InvalidQuantityException();
+        }
+        return aL;
     }
 
     public Iterable<CharacterHero> getAllCharacters() throws IOException {
@@ -40,28 +61,49 @@ public class CharacterService {
         return getListOfCharacters(url);
     }
 
-    public CharacterHero getCharacter(String characterName) throws JsonProcessingException, MalformedURLException {
+    public CharacterHero getCharacter(String characterName) throws JsonProcessingException, MalformedURLException,
+            NoCharacterFoundException {
         String url = CHARACTERS_URL + getAuthParameters() + NAME_STARTS_WITH + characterName;
-        return getListOfCharacters(url).get(0);
-    }
-
-    public Iterable<CharacterHero> getFavorites() {
-        return repository.findAll();
-    }
-
-    public void insertFav(CharacterHero hero) {
-        if (hero != null && hero.getName() != null && hero.getId() != 0) {
-            repository.save(hero);
+        ArrayList<CharacterHero> aL = getListOfCharacters(url);
+        if (aL.size() == 0) {
+            throw new NoCharacterFoundException();
+        } else {
+            return aL.get(0);
         }
     }
 
-    public void removeFavByName(String name) {
-        if (stringIsNotNullOrEmpty(name)) {
-            repository.deleteByName(name);
+    public Iterable<CharacterHero> getCharacters(String characterName) throws JsonProcessingException, MalformedURLException,
+            NoCharacterFoundException {
+        String url = CHARACTERS_URL + getAuthParameters() + NAME_STARTS_WITH + characterName;
+        ArrayList<CharacterHero> aL = getListOfCharacters(url);
+        if (aL.size() == 0) {
+            throw new NoCharacterFoundException();
+        } else {
+            return aL;
         }
     }
 
-    private ArrayList<CharacterHero> getListOfCharacters(String url) throws JsonProcessingException, MalformedURLException {
+    public Iterable<CharacterHero> getFavorites() throws FavoriteListEmptyException {
+        Iterable<CharacterHero> it = repository.findAll();
+        if (it.iterator().hasNext()) {
+            return it;
+        } else {
+            throw new FavoriteListEmptyException();
+        }
+    }
+
+    public void insertFav(String name) throws MalformedURLException, JsonProcessingException,
+            NoCharacterFoundException {
+        repository.save(getCharacter(name));
+    }
+
+    public void removeFav(String name) throws MalformedURLException, JsonProcessingException,
+            NoCharacterFoundException {
+        repository.delete(getCharacter(name));
+    }
+
+    private ArrayList<CharacterHero> getListOfCharacters(String url) throws JsonProcessingException,
+            MalformedURLException {
         ArrayList<CharacterHero> characters = new ArrayList<>();
         StringBuffer imageUrl = new StringBuffer();
         for (JsonNode jN: getResults(url)) {
