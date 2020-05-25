@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import static com.example.Utilities.StringUtil.cleanString;
+import static com.example.Utilities.StringUtil.stringIsNotNullOrEmpty;
 import static com.example.Utilities.UrlFormatter.getAuthParameters;
 import static com.example.Utilities.UrlFormatter.getImageUrl;
 
@@ -46,6 +47,18 @@ public class CharacterService {
 
     public Iterable<CharacterHero> getFavorites() {
         return repository.findAll();
+    }
+
+    public void insertFav(CharacterHero hero) {
+        if (hero != null && hero.getName() != null && hero.getId() != 0) {
+            repository.save(hero);
+        }
+    }
+
+    public void removeFavByName(String name) {
+        if (stringIsNotNullOrEmpty(name)) {
+            repository.deleteByName(name);
+        }
     }
 
     private ArrayList<CharacterHero> getListOfCharacters(String url) throws JsonProcessingException, MalformedURLException {

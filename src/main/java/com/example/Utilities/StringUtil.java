@@ -11,4 +11,8 @@ public class StringUtil {
             }
         }*/
     }
+
+    public static boolean stringIsNotNullOrEmpty(String str) {
+        return (str != null && !str.trim().isEmpty());
+    }
 }

@@ -3,10 +3,8 @@ package com.example.Controller;
 import com.example.Entities.CharacterHero;
 import com.example.Service.CharacterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -30,5 +28,15 @@ public class CharacterController {
     @GetMapping(value = "/favs")
     public Iterable<CharacterHero> getFavorites() {
         return characterService.getFavorites();
+    }
+
+    @PutMapping(value = "/favs",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void insertFav(@RequestBody CharacterHero hero) {
+        this.characterService.insertFav(hero);
+    }
+
+    @DeleteMapping(value = "/{name}")
+    public void deleteStudentById(@PathVariable("name") String name) {
+        this.characterService.removeFavByName(name);
     }
 }

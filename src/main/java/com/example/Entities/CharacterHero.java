@@ -1,5 +1,6 @@
 package com.example.Entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.net.URL;
@@ -10,11 +11,11 @@ public class CharacterHero {
     @Id
     private int id;
     private String name;
+    @Column(length=5000)
     private String description;
     private URL pic;
-
-    public CharacterHero(){}
-
+    public CharacterHero() {
+    }
     public CharacterHero(int id, String name, String description) {
         this.id = id;
         this.name = name;
@@ -26,6 +27,14 @@ public class CharacterHero {
         this.name = name;
         this.description = description;
         this.pic = pic;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public URL getPic() {
@@ -55,6 +64,6 @@ public class CharacterHero {
     @Override
     public String toString() {
         return "Character id= " + id + "Character Name= " + name +
-                ", Character description= " + description ;
+                ", Character description= " + description;
     }
 }
