@@ -1,11 +1,10 @@
 # MarvelAPIConsumer
- Aplicación que consume la API de Marvel.  
- Devuelve información procesada de los distintos heroes que se obtienen de esta API.  
+ App that consume Marvel API.  
+ Returns processed information of the different heroes obtained from this API.
  
- Esta aplicación también ofrece la funcion de mantener una lista de heroes
- favoritos.  
+This application also offers the function of keeping a list of favorite heroes.
   
-La aplicacion se puede acceder desde: https://marvelapiconsumer.herokuapp.com/marvel  
-  Puede demorar unos minutos hasta que la aplicación levante en Heroku.  
+The application can be accessed from: https://marvelapiconsumer.herokuapp.com/marvel
+It may take a few minutes for the app to lift up on Heroku.
   
-La documentación de la API se encuentra en: https://marvelapiconsumer.herokuapp.com/swagger-ui.html
+This API documentation is at: https://marvelapiconsumer.herokuapp.com/swagger-ui.html
