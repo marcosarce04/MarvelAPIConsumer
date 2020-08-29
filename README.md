@@ -1,4 +1,4 @@
-# MarvelAPIConsumer
+# Marvel API Consumer
  App that consume Marvel API.  
  Returns processed information of the different heroes obtained from this API.
  
