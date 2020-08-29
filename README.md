@@ -1,5 +1,6 @@
 # Marvel API Consumer
- App that consume Marvel API.  
+ Application that consumes the Marvel API.
+ 
  Returns processed information of the different heroes obtained from this API.
  
 This application also offers the function of keeping a list of favorite heroes.
