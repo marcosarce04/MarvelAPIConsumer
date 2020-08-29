@@ -22,41 +22,40 @@ public class CharacterController {
     private CharacterService characterService;
 
     @GetMapping(produces = "application/json")
-    @ApiOperation(value = "Devuelve los primeros 20 resultados de una consulta a la API de Marvel " +
-            "sin ningun tipo de parametro")
+    @ApiOperation(value = "Returns the first 20 results of a query to the Marvel API without any type of parameter.")
     public Iterable<CharacterHero> getAllCharacters() throws IOException {
         return characterService.getAllCharacters();
     }
 
     @GetMapping(value = "/cant/{cant}", produces = "application/json")
-    @ApiOperation(value = "Devuelve la cantidad de resultados de acuerdo al parametro {cant}")
+    @ApiOperation(value = "Returns the number of results according to the {cant} parameter.")
     public Iterable<CharacterHero> getAllCharacters(@PathVariable("cant") String cant) throws IOException,
             InvalidQuantityException {
         return characterService.getAllCharacters(cant);
     }
 
     @GetMapping(value = "/{name}", produces = "application/json")
-    @ApiOperation(value = "Devuelve la informacion de los heroes que comienzan con las letras en {name}")
+    @ApiOperation(value = "Returns the heroes information that begin with the letters in {name}")
     public Iterable<CharacterHero> getHeros(@PathVariable("name") String name) throws IOException,
             NoCharacterFoundException {
         return characterService.getCharacters(name);
     }
 
     @GetMapping(value = "/favs", produces = "application/json")
-    @ApiOperation(value = "Devuelve la lista de heroes favoritos")
+    @ApiOperation(value = "Returns the list of favorite heroes")
     public Iterable<CharacterHero> getFavorites() throws FavoriteListEmptyException {
         return characterService.getFavorites();
     }
 
     @PutMapping(value = "/favs/{name}")
-    @ApiOperation(value = "Agrega un heroe a la lista de favoritos")
+    @ApiOperation(value = "Add a hero to the favorites list")
     public void insertFav(@PathVariable String name) throws MalformedURLException, JsonProcessingException,
             NoCharacterFoundException {
         this.characterService.insertFav(name);
     }
 
     @DeleteMapping(value = "/favs/{name}")
-    @ApiOperation(value = "Elimina un heroe de la lista de favoritos")
+    @ApiOperation(value = "Remove a hero from the favorites list")
     @Transactional
     public void deleteFav(@PathVariable("name") String name) throws MalformedURLException,
             JsonProcessingException, NoCharacterFoundException {
