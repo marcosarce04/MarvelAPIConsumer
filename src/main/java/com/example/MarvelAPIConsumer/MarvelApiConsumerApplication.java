@@ -7,15 +7,15 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan(basePackages="com.example")
+@ComponentScan(basePackages = "com.example")
 @EntityScan("com.example.Entities")
-@EnableJpaRepositories("com.example.Dao")
+@EnableJpaRepositories("com.example.Repositories")
 public class MarvelApiConsumerApplication {
 
-	public static void main(String[] args) {
+  public static void main(String[] args) {
 
-		SpringApplication.run(MarvelApiConsumerApplication.class, args);
+    SpringApplication.run(MarvelApiConsumerApplication.class, args);
 
-	}
+  }
 
 }
